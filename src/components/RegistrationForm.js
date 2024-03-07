@@ -107,7 +107,7 @@ const RegistrationForm = ({ onRegister }) => {
           I agree to the Terms and Conditions
         </label><br/><br/>
     <button style={{textAlign:'center',margin: '0 auto',
-    display: 'block',}} type="submit">Submit</button>
+    display: 'block', backgroundColor:'green'}} type="submit">Submit</button>
   </form>
   </body>
   );

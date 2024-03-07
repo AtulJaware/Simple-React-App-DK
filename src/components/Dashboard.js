@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Dashboard.css'; 
 
 const Dashboard = ({ users, onEdit, onDelete }) => {
     const handleGoBack   = () => window.history.back();
+    const [editableUserId, setEditableUserId] = useState(null);
+
+  const handleEditClick = (userId) => {
+    setEditableUserId(userId);
+  };
+
+  const handleSaveClick = (id,user) => {
+    setEditableUserId(null);
+    onEdit(id,user);
+    // You can implement logic to save changes to the server if needed
+  };
+
+  const handleKeyDown = (event, userId) => {
+    if (event.key === 'Enter') {
+      setEditableUserId(null);
+      // You can implement logic to save changes to the server if needed
+    }
+  };
   return (
     <div className="dashboard-container">
         <h1>Dashboard Page</h1>
@@ -19,13 +37,43 @@ const Dashboard = ({ users, onEdit, onDelete }) => {
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.country}</td>
-              <td>{user.comment}</td>
-              <td>{user.gender}</td>
+              <td
+                contentEditable={editableUserId === user.id}
+                suppressContentEditableWarning={true}
+                onKeyDown={(e) => handleKeyDown(e, user.id)}
+              >
+                {user.name}
+              </td>
+              <td
+                contentEditable={editableUserId === user.id}
+                suppressContentEditableWarning={true}
+                onKeyDown={(e) => handleKeyDown(e, user.id)}
+              >
+                {user.country}
+              </td>
+              <td
+                contentEditable={editableUserId === user.id}
+                suppressContentEditableWarning={true}
+                onKeyDown={(e) => handleKeyDown(e, user.id)}
+              >
+                {user.comment}
+              </td>
+              <td
+                contentEditable={editableUserId === user.id}
+                suppressContentEditableWarning={true}
+                onKeyDown={(e) => handleKeyDown(e, user.id)}
+              >
+                {user.gender}
+              </td>
               <td>
-                <button onClick={() => onEdit(user.id)}>Edit</button>
-                <button style={{backgroundColor: 'red' }} onClick={() => onDelete(user.id)}>Delete</button>
+                {editableUserId === user.id ? (
+                  <button style={{ backgroundColor: 'green'}} onClick={() => handleSaveClick(user.id,user)}><b>Save</b></button>
+                ) : (
+                  <button onClick={() => handleEditClick(user.id)}>Edit</button>
+                )}
+                <button style={{ backgroundColor: 'red' }} onClick={() => onDelete(user.id)}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
